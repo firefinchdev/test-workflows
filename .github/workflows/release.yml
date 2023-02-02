@@ -15,6 +15,8 @@ jobs:
             mkdir $GITHUB_WORKSPACE
           fi
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up environment
         run: |
           echo "txt1" > abc.txt
@@ -46,7 +48,7 @@ jobs:
         id: create_release
         if: success()
         env:
-          GITHUB_TOKEN: "abcd"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: firefinchdev/treewaredebug@v3.1
         with:
           drafter_path: .github/release-template.yml
@@ -59,7 +61,7 @@ jobs:
       - name: Update release on github
         if: steps.create_release.outcome == 'success'
         env:
-          GITHUB_TOKEN: "abcd"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: firefinchdev/treewaredebug@v3.1
         with:
           drafter_path: .github/release-template.yml
