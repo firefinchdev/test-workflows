@@ -44,6 +44,8 @@ jobs:
       - name: Publish release on github
         id: create_release
         if: success()
+        env:
+          GITHUB_TOKEN: "abcd"
         uses: firefinchdev/treewaredebug@v3.1
         with:
           drafter_path: .github/release-template.yml
@@ -55,6 +57,8 @@ jobs:
           title_observer_section: "Shipping title"
       - name: Update release on github
         if: steps.create_release.outcome == 'success'
+        env:
+          GITHUB_TOKEN: "abcd"
         uses: firefinchdev/treewaredebug@v3.1
         with:
           drafter_path: .github/release-template.yml
