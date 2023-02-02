@@ -14,6 +14,7 @@ jobs:
             sudo rm -rf $GITHUB_WORKSPACE
             mkdir $GITHUB_WORKSPACE
           fi
+      - uses: actions/checkout@v2
       - name: Set up environment
         run: |
           echo "txt1" > abc.txt
