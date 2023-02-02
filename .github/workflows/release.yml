@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: [ android-github-actions-instance ]
+    runs-on: [ ubuntu-latest ]
     steps:
       - name: Remove files
         run: |
