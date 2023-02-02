@@ -1,0 +1,62 @@
+name: Github Release
+
+jobs:
+  build:
+    runs-on: [ android-github-actions-instance ]
+    steps:
+      - name: Remove files
+        run: |
+          if [ -d $GITHUB_WORKSPACE ]; then
+            sudo rm -rf $GITHUB_WORKSPACE
+            mkdir $GITHUB_WORKSPACE
+          fi
+      - name: Set up environment
+        run: |
+          echo "txt1" > abc.txt
+          echo "txt2" > abc2.txt
+          txt_file="abc.txt"
+          echo "TXT_FILE=$txt_file" >> $GITHUB_ENV
+          txt_file_2="abc2.txt"
+          echo "TXT_FILE_2=$txt_file_2" >> $GITHUB_ENV
+
+#      - name: Tag release
+#        if: success()
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.ZOMATO_BOT_PAC }}
+#        run: |
+#          version_name=v$($GITHUB_WORKSPACE/DevTools/get-app-version.sh $GITHUB_WORKSPACE/android_gradle/version.properties)
+#          echo "Tagging release with tag $version_name"
+#          commit_message=$(git log -1 --pretty=%B)
+#          echo "commit message $commit_message"
+#          git config user.name ${GITHUB_ACTOR}
+#          git config user.email ${GITHUB_ACTOR}@zomato.com
+#          git tag -a $version_name -m ""
+#          git push origin --tags
+#          echo "VERSION_NAME=$version_name" >> $GITHUB_ENV
+#          echo 'COMMIT_MESSAGE<<EOF' >> $GITHUB_ENV
+#          echo "$commit_message" >> $GITHUB_ENV
+#          echo 'EOF' >> $GITHUB_ENV
+
+      - name: Publish release on github
+        id: create_release
+        if: success()
+        uses: firefinchdev/treewaredebug@v3.1
+        with:
+          drafter_path: .github/release-template.yml
+          prod_branch: main
+          should_release: true
+          version_name: "release"
+          assets: ${{ env.TXT_FILE }}#file1.txt
+          extra_release_note: Change in app size = 0 bytes
+          title_observer_section: "Shipping title"
+      - name: Update release on github
+        if: steps.create_release.outcome == 'success'
+        uses: firefinchdev/treewaredebug@v3.1
+        with:
+          drafter_path: .github/release-template.yml
+          prod_branch: main
+          should_update_release: true
+          version_name: "release"
+          assets: ${{ env.TXT_FILE }}#file1.txt, ${{ env.TXT_FILE_2 }}#file2.txt
+          extra_release_note: Change in app size = 0 bytes
+          title_observer_section: "Shipping title"
