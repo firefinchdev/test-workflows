@@ -49,7 +49,7 @@ jobs:
         if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: firefinchdev/treewaredebug@v3.2
+        uses: firefinchdev/treewaredebug@v3.3
         with:
           drafter_path: .github/release-template.yml
           prod_branch: main
@@ -62,7 +62,7 @@ jobs:
         if: steps.create_release.outcome == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: firefinchdev/treewaredebug@v3.2
+        uses: firefinchdev/treewaredebug@v3.3
         with:
           drafter_path: .github/release-template.yml
           prod_branch: main
